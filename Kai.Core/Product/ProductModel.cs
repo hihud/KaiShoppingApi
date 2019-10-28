@@ -7,8 +7,8 @@ namespace Kai.Core.Product
 {
     public class ProductModel
     {
-        [JsonProperty("id")]
-        public int Id { get; set; }
+        [JsonProperty("lusid")]
+        public Guid LusId { get; set; }
         [JsonProperty("name")]
         public string Name { get; set; }
         [JsonProperty("collection")]
@@ -19,5 +19,7 @@ namespace Kai.Core.Product
         public string Category { get; set; }
         [JsonProperty("provider")]
         public string Provider { get; set; }
+        [JsonProperty("description")]
+        public string Description { get; set; }
     }
 }

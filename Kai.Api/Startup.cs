@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Kai.Core;
+using Kai.Core.User;
 using Kai.Service.ProductService;
 using Kai.Service.UserService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -32,9 +34,9 @@ namespace Kai.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
             services.AddScoped(typeof(IUserService), typeof(UserService));
             services.AddScoped(typeof(IProductService), typeof(ProductService));
-            services.AddCors();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
@@ -52,9 +54,12 @@ namespace Kai.Api
                 {
                     OnTokenValidated = context =>
                     {
-                        var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
-                        var userId = int.Parse(context.Principal.Identity.Name);
-                        var user = userService.GetUser(userId);
+                        //var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
+                        //var userId = int.Parse(context.Principal.Identity.Name);
+                        var user = new UserModel { };
+                        user.Type = context.Principal.Claims.FirstOrDefault(c => c.Type == "type").Value;
+                        user.Username = context.Principal.Claims.FirstOrDefault(c => c.Type == "username").Value;
+                        // user.HashCode = currentUser.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Email).Value; 
                         if (user == null)
                         {
                             // return unauthorized if user no longer exists
@@ -90,7 +95,11 @@ namespace Kai.Api
             {
                 app.UseHsts();
             }
-
+            app.UseCors(builder => builder
+              .AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .AllowCredentials());
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseMvc();

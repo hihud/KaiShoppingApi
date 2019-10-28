@@ -7,8 +7,9 @@ namespace Kai.Service.UserService
 {
     public interface IUserService
     {
-        string Login(UserModel user);
-        UserModel Register(UserModel user);
+        string GenerateToken(UserModel user);
+        void Register(UserModel user);
         UserModel GetUser(int Id);
+        UserModel Login(UserModel user);
     }
 }

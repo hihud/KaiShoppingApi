@@ -23,15 +23,25 @@ namespace Kai.Api.Controllers
 
         [Route("GetAll")]
         [HttpGet]
-       // [Authorize]
+        [Authorize]
         public IActionResult GetProduct(string message)
         {
             var result = _productService.GetAllProduct();
             return Ok(result);
         }
+        [Route("GetProductInfor")]
+        [HttpGet]
+        [Authorize]
+        public IActionResult GetProductInfor(string lusid)
+        {
+            var id = Guid.Parse(lusid);
+            var result = _productService.GetProduct(id);
+            return Ok(result);
+        }
 
         [Route("AddProduct")]
         [HttpPost]
+        [Authorize]
         public IActionResult AddProduct([FromBody] ProductDto product)
         {
             if(product== null)
@@ -40,6 +50,19 @@ namespace Kai.Api.Controllers
             }
             _productService.AddProduct(product);
             return Ok();
+        }
+
+        [Route("UpdateProduct")]
+        [HttpPut]
+        [Authorize]
+        public IActionResult UpdateProduct([FromBody] ProductDto product)
+        {
+            if (product == null)
+            {
+                return BadRequest();
+            }
+            var result = _productService.UpdateProduct(product);
+            return Ok(result);
         }
     }
 }

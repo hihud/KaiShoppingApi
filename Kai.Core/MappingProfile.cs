@@ -12,7 +12,7 @@ namespace Kai.Core
         public MappingProfile()
         {
             CreateMap<ProductDto, ProductModel>();
-            CreateMap<UserDto, UserModel>();
+            CreateMap<UserDto, UserModel>().ReverseMap();
         }
     }
 }
