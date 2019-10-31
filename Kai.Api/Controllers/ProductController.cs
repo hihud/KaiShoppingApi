@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Kai.Api.Models;
 using Kai.Core.Product;
 using Kai.Service.ProductService;
 using Microsoft.AspNetCore.Authorization;
@@ -42,13 +43,23 @@ namespace Kai.Api.Controllers
         [Route("AddProduct")]
         [HttpPost]
         [Authorize]
-        public IActionResult AddProduct([FromBody] ProductDto product)
+        public IActionResult AddProduct([FromBody] UpdateProductModel product)
         {
             if(product== null)
             {
                 return BadRequest();
             }
-            _productService.AddProduct(product);
+            var productDto = new ProductDto()
+            {
+                Category = product.Category,
+                Collection = product.Collection,
+                Description = product.Description,
+                LusId = product.LusId,
+                Name = product.Name,
+                Provider = product.Provider,
+                Type = product.Type
+            };
+            //_productService.AddProduct(productDto);
             return Ok();
         }
 

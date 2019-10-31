@@ -8,7 +8,7 @@ namespace Kai.Core.Product
     public class ProductInfoDto
     {
         [JsonProperty("id")]
-        public string Id { get; set; }
+        public Guid Id { get; set; }
         [JsonProperty("productid")]
         public string ProductId { get; set; }
         [JsonProperty("color")]
